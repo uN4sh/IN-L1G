@@ -1,0 +1,126 @@
+#include "uvsqgraphics.h"
+
+
+POINT T[8][8]; //Tableau des centres des cases en partant d'en bas à droites
+POINT centre;
+
+
+void bloc(POINT BG, POINT HD, COULEUR coul) //Graphique
+{
+	POINT bg1, hd1;
+	bg1.x = BG.x + 2; bg1.y = BG.y + 2;
+	hd1.x = HD.x - 2; hd1.y = HD.y - 2;
+	draw_fill_rectangle(BG, HD, gray);
+	draw_fill_rectangle(bg1, hd1, coul);
+}
+
+void echiquier() //Dessine echiquier et stocke centres dans le tableau
+{
+	POINT BG, HD;
+	COULEUR coul;
+	int i, j, n;
+	
+	BG.x = 0; BG.y = 0;
+	HD.x = 100; HD.y = 100;
+	
+	i = 0; j = 0; n = 0;
+	while (j < 8)
+	{
+		while (i < 8)
+		{
+			if (n % 2 == 0)
+				coul = blanc;
+			else
+				coul = noir;
+			
+			bloc(BG, HD, coul);
+			
+			centre.x= BG.x + 50; centre.y = BG.y + 50;
+			T[i][j] = centre;
+			// T[0][0] = la case en bas à droite 
+			// T[1][0] = celle juste à droite
+			
+			//T[0][1] = 2eme ligne en partant du bas, premiere case à droite
+			
+			
+			//draw_fill_rectangle(BG, HD, coul);
+			
+			n++;
+			i++;
+			BG.x += 100; HD.x += 100;
+		}
+		
+		if (j % 2 == 0)
+			n = 1;
+		else
+			n = 0;
+			
+		i = 0;
+		j++;
+		BG.x = 0; HD.x = 100;
+		BG.y += 100; HD.y += 100;
+	}
+	
+	
+}
+
+void clic_bloc(POINT p)
+{
+	// Quand on clic dans une case, ca donne le centre 
+	// Calcule le centre d'une case ou y'a p
+	int i=0;
+	POINT c;
+	
+	if //p dans une case, on donne le T approprié)
+	
+	/*
+	while (i<8)
+	{
+		if ((p.y > 100*i) && (p.y < 100 + 100*i))
+		{
+			
+			if (p.x > 200)
+				c = T[0][0];
+			else if (p.x > 100)
+				c.x = 150; 
+			else
+				c.x = 50; 
+			// 3 abscisses 
+		}
+		i++; 
+	}
+	*/
+}
+void bouge_pion(POINT c, POINT p)
+{
+	//retiens l'ancien centre
+	//cercle noir ancien centre
+	//cercle rouge nouveau centre
+	POINT cp; //c précédent
+	cp = c;
+	
+	draw_fill_circle(c, 45, black);
+	draw_fill_circle(p, 45, rouge);
+	// AU CLIC P, CENTRER SUR LA CASE EN C !!
+}
+
+int main()
+{
+	init_graphics(800,800);
+
+	// Debut du code
+	
+	echiquier();
+// cercle 
+	POINT c; // centre de la tour
+	
+	c.x = 50; c.y = 50;
+	draw_fill_circle(c, 45, gray);
+	
+	
+	
+	// Fin du code
+
+	wait_escape();
+	exit(0);
+}

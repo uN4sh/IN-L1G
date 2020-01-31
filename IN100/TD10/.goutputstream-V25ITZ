@@ -1,0 +1,102 @@
+#include "uvsqgraphics.h"
+// Manque a faire les bords et coins
+// Manque int encore et void jeu
+// Question théoriques : Pour gagner a coups sur, faut init tout noir, et laisser l'ordi jouer qqs coups (sans rappuyer au meme endroit) pour mettre un aléatoire possible à revenir en arrière
+int plateau[10][10];
+// WIDTH = 1000
+// (WIDTH/10) = 100
+// (WIDTH/10)/2 = 50
+
+void dessine_jeton(int i, int j)
+{
+	// calcule la couleur et le centre de la case, et dessine le cerlce
+	COULEUR coul;
+	POINT centre;
+	
+	if (plateau[i][j] == 0) coul = blanc;
+	else 					coul = noir;
+	
+	centre.x = i*(WIDTH/10) + (WIDTH/10)/2; centre.y = j*(WIDTH/10) + (WIDTH/10)/2;
+	draw_fill_circle(centre, (WIDTH/10)/2, coul);
+}
+
+void initialise_plateau()
+{
+	int i,j;
+	POINT centre;
+	COULEUR coul;
+	
+	for(j=0; j<10; j++) {
+		for(i=0; i<10; i++) {
+			
+			centre.x = i*(WIDTH/10) + (WIDTH/10)/2; centre.y = j*(WIDTH/10) + (WIDTH/10)/2;
+			
+			if(alea_int(2) == 0) {coul = blanc; plateau[i][j] = 0;}
+			else 				 {coul = noir; plateau[i][j] = 1;}
+			
+			draw_fill_circle(centre,(WIDTH/10)/2,coul);
+		}
+	}
+}
+
+void affiche_plateau()
+{
+	fill_screen(gris);
+	initialise_plateau();
+}
+
+void modifie_plateau(POINT p)
+{
+	int i,j;
+	
+	i = p.x / (WIDTH/10);
+	j = p.y / (WIDTH/10);
+	
+	plateau[i][j] = 1 - plateau[i][j];
+	dessine_jeton(i,j);
+	
+	i = i+1; //à droite [i+1][j]
+	plateau[i][j] = 1 - plateau[i][j];
+	dessine_jeton(i,j);
+	
+	i = i-2; //à gauche [i-1][j]
+	plateau[i][j] = 1 - plateau[i][j];
+	dessine_jeton(i,j);
+	
+	i = i+1; j = j+1; //en haut [i][j+1]
+	plateau[i][j] = 1 - plateau[i][j];
+	dessine_jeton(i,j);
+	
+	j = j-2; //en bas [i][j-1]
+	plateau[i][j] = 1 - plateau[i][j];
+	dessine_jeton(i,j);
+	
+}
+
+int encore()
+{
+	return 0 // si tous les jetons sont différents de zéro
+}
+
+void jeu()
+{
+	// if (encore = 0) OU (n<100)
+	wait_escape();
+}
+
+int main()
+{
+	init_graphics(800,800);
+	POINT p;
+	
+	affiche_plateau();
+	
+	while(1) {
+	p = wait_clic();
+	modifie_plateau(p);
+}
+	
+
+	wait_escape();
+	exit(0);
+}
